@@ -45,6 +45,7 @@ void cdistLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
   const int h = bottom[0]->shape(2); 
   const int w = bottom[0]->shape(3);
   const int oc  =bottom[1]->shape(0);
+  CHECK_EQ(c, bottom[1]->shape(1));
   cdist_fwd_kernel<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
         <<<CAFFE_GET_BLOCKS(dim), CAFFE_CUDA_NUM_THREADS>>>(
           dim, c, h,w,oc, bottom_data, weight, top_data);
