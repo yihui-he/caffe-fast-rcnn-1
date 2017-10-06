@@ -26,7 +26,7 @@ namespace caffe {
   
         Dtype v = 0;
         for (int i = 0; i < channels; i++){
-          v += (input_data - weight_data[i]) * (input_data - weight_data[i])
+          v += (input_data[0] - weight_data[i]) * (input_data[0] - weight_data[i]);
           input_data += i * height * width;
         }
   
@@ -41,10 +41,14 @@ void cdistLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
   const Dtype* bottom_data = bottom[0]->gpu_data();
   const Dtype* weight = bottom[1]->gpu_data();
   Dtype* top_data = top[0]->mutable_gpu_data();
-  int dim = top[0]->count();
-  spatial_conv_fwd_kernel<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
+  const int dim = top[0]->count();
+  const int c = bottom[0]->shape(1);
+  const int h = bottom[0]->shape(2); 
+  const int w = bottom[0]->shape(3);
+  const int oc  =top[0]->shape(0);
+  cdist_fwd_kernel<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
         <<<CAFFE_GET_BLOCKS(dim), CAFFE_CUDA_NUM_THREADS>>>(
-          dim, bottom[0]-shape(1), bottom[0]-shape(2), bottom[0]-shape(3), top[0]-shape(0), bottom_data, weight, top_data);
+          dim, c, h,w,oc, bottom_data, weight, top_data);
 }
 
 template <typename Dtype>

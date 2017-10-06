@@ -7,12 +7,12 @@
 namespace caffe {
 
 template <typename Dtype>
-void InnerProductLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
+void cdistLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
 }
 
 template <typename Dtype>
-void InnerProductLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
+void cdistLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
   vector<int> top_shape = bottom[0]->shape();
   top_shape[1] = bottom[1]->shape(0);
@@ -20,13 +20,13 @@ void InnerProductLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
 }
 
 template <typename Dtype>
-void InnerProductLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+void cdistLayer<Dtype>::Forward_cpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
   NOT_IMPLEMENTED;            
 }
 
 template <typename Dtype>
-void InnerProductLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
+void cdistLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
     const vector<bool>& propagate_down,
     const vector<Blob<Dtype>*>& bottom) {
   NOT_IMPLEMENTED;      
