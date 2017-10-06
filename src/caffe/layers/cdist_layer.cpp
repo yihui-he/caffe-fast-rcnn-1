@@ -14,8 +14,11 @@ void cdistLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 template <typename Dtype>
 void cdistLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
-  vector<int> top_shape = bottom[0]->shape();
+  vector<int> top_shape(4);
+  top_shape[0] = bottom[0]->shape(0);
   top_shape[1] = bottom[1]->shape(0);
+  top_shape[2] = bottom[0]->shape(2);
+  top_shape[3] = bottom[0]->shape(3);
   top[0]->Reshape(top_shape);
 }
 
