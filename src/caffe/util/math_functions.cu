@@ -137,6 +137,18 @@ void caffe_gpu_dot<double>(const int n, const double* x, const double* y,
 }
 
 template <>
+void caffe_gpu_strided_dot<float>(const int n, const float* x,const float* incx, const float* y, const float* incy,
+    float* out) {
+  CUBLAS_CHECK(cublasSdot(Caffe::cublas_handle(), n, x, incx, y, incy, out));
+}
+
+template <>
+void caffe_gpu_strided_dot<double>(const int n, const double* x,const float* incx, const double* y, const float* incy,
+    double * out) {
+  CUBLAS_CHECK(cublasDdot(Caffe::cublas_handle(), n, x, incx, y, incy, out));
+}
+
+template <>
 void caffe_gpu_asum<float>(const int n, const float* x, float* y) {
   CUBLAS_CHECK(cublasSasum(Caffe::cublas_handle(), n, x, 1, y));
 }
