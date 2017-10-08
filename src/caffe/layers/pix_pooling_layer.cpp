@@ -86,19 +86,20 @@ void PIXPoolingLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
   channels_ = bottom[0]->channels(); // is 1
   height_ = bottom[0]->height();
   width_ = bottom[0]->width();
+  // The first "axis" dimensions are independent inner products; the total
+  // number of these is M_, the product over these dimensions.
+  M_ = bottom[1]->shape(0);
   
   vector<int> top_shape(2);
-  top_shape[0] = bottom->shape(0);
+  top_shape[0] = M_;
+  top_shape[1] = N_;
   top[0]->Reshape(top_shape);
   max_idx_.Reshape(K_);
   caffe_set(M_, Dtype(0), bias_multiplier_.mutable_cpu_data());
   
-  // Figure out the dimensions
-  const int axis = bottom[0]->CanonicalAxisIndex(
-    this->layer_param_.inner_product_param().axis());
-  // The first "axis" dimensions are independent inner products; the total
-  // number of these is M_, the product over these dimensions.
-  M_ = bottom[1]->shape(0);
+  // // Figure out the dimensions
+  // const int axis = bottom[0]->CanonicalAxisIndex(
+  //   this->layer_param_.inner_product_param().axis());
   // Set up the bias multiplier
   if (bias_term_) {
     vector<int> bias_shape(1, M_);
