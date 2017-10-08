@@ -61,7 +61,7 @@ __global__ void PIXPoolForward(const int nthreads, const Dtype* bottom_data,  co
     bool is_empty = (hend <= hstart) || (wend <= wstart);
 
     // Define an empty pooling region to be zero
-    Dtype maxval = is_empty ? 0 : -FLT_MAX;
+    // Dtype maxval = is_empty ? 0 : -FLT_MAX;
     // If nothing is pooled, argmax = -1 causes nothing to be backprop'd
     int maxidx = -1;
 
@@ -113,7 +113,7 @@ __global__ void PIXPoolBackward(const int nthreads, const Dtype* temp_data,
     const Dtype* argmax_data, const int num_output, Dtype* weight_diff) {
   CUDA_KERNEL_LOOP(index, nthreads) {
     if (argmax_data[index]){
-      caffe_gpu_scale(num_output, (Dtype)(argmax_data[index]), temp_data, weight_diff[num_output*index]);
+      caffe_gpu_scale(num_output, (Dtype)(argmax_data[index]), temp_data, weight_diff +num_output*index);
     }
   }
 }
