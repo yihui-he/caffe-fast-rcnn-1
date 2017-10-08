@@ -75,7 +75,8 @@ __global__ void PIXPoolForward(const int nthreads, const Dtype* bottom_data,  co
         if (is_empty) {
           ;
         } else {
-          caffe_gpu_add(num_output, weight+weight_index, top_data+n*num_output, top_data+n*num_output);
+          // TODO not allowed
+          // caffe_gpu_add(num_output, weight+weight_index, top_data+n*num_output, top_data+n*num_output);
         }
         
         // if (bottom_data[bottom_index] > maxval) {
@@ -113,7 +114,8 @@ __global__ void PIXPoolBackward(const int nthreads, const Dtype* temp_data,
     const Dtype* argmax_data, const int num_output, Dtype* weight_diff) {
   CUDA_KERNEL_LOOP(index, nthreads) {
     if (argmax_data[index]){
-      caffe_gpu_scale(num_output, (Dtype)(argmax_data[index]), temp_data, weight_diff +num_output*index);
+      // TODO not allowed
+      // caffe_gpu_scale(num_output, (Dtype)(argmax_data[index]), temp_data, weight_diff +num_output*index);
     }
   }
 }
