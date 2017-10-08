@@ -20,6 +20,8 @@ void cdistLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
   top_shape[2] = bottom[0]->shape(2);
   top_shape[3] = bottom[0]->shape(3);
   top[0]->Reshape(top_shape);
+  cos_ = this->layer_param_.cdist_param().cos();
+  
 }
 
 template <typename Dtype>

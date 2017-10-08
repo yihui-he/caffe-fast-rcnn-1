@@ -560,6 +560,7 @@ message BiasParameter {
   optional FillerParameter filler = 3;
 }
 message cdistParameter {
+  optional int32 cos = 1 [default = 1];
 }
 
 message ContrastiveLossParameter {

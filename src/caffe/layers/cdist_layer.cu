@@ -7,7 +7,7 @@ namespace caffe {
 
   template <typename Dtype>
   __global__ void cdist_fwd_kernel(const int count, const int channels, const int height, const int width,
-              const int out_channels,
+              const int out_channels, const int cos,
               const Dtype *input_data, const Dtype *weight_data, Dtype *output_data) { //, const Dtype *bias_data
     CUDA_KERNEL_LOOP(index, count) {
         output_data+=index;
@@ -25,8 +25,15 @@ namespace caffe {
         weight_data += oc * channels;
   
         Dtype v = 0;
-        for (int i = 0; i < channels; i++){
-          v += (input_data [i*height*width] - weight_data[i]) * (input_data[i*height*width] - weight_data[i]);
+        if (cos) {
+          for (int i = 0; i < channels; i++){
+            v += (input_data [i*height*width] * weight_data[i]);
+          }
+          v = 1 - v;
+        } else {
+            for (int i = 0; i < channels; i++){
+              v += (input_data [i*height*width] - weight_data[i]) * (input_data[i*height*width] - weight_data[i]);
+            }
         }
   
         *output_data = v;
@@ -48,7 +55,7 @@ void cdistLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
   CHECK_EQ(c, bottom[1]->shape(1));
   cdist_fwd_kernel<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
         <<<CAFFE_GET_BLOCKS(dim), CAFFE_CUDA_NUM_THREADS>>>(
-          dim, c, h,w,oc, bottom_data, weight, top_data);
+          dim, c, h,w,oc, cos_, bottom_data, weight, top_data);
 }
 
 template <typename Dtype>
