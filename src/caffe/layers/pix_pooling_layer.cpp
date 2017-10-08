@@ -35,8 +35,8 @@ void PIXPoolingLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   bias_term_ = this->layer_param_.inner_product_param().bias_term();
   transpose_ = this->layer_param_.inner_product_param().transpose();
   N_ = num_output;
-  const int axis = bottom[0]->CanonicalAxisIndex(
-      this->layer_param_.inner_product_param().axis());
+  // const int axis = bottom[0]->CanonicalAxisIndex(
+  //     this->layer_param_.inner_product_param().axis());
   // Dimensions starting from "axis" are "flattened" into a single
   // length K_ vector. For example, if bottom[0]'s shape is (N, C, H, W),
   // and axis == 1, N inner products with dimension CHW are performed.
@@ -94,7 +94,7 @@ void PIXPoolingLayer<Dtype>::Reshape(const vector<Blob<Dtype>*>& bottom,
   top_shape[0] = M_;
   top_shape[1] = N_;
   top[0]->Reshape(top_shape);
-  max_idx_.Reshape(K_);
+  max_idx_.Reshape(K_,1,1,1);
   caffe_set(M_, Dtype(0), bias_multiplier_.mutable_cpu_data());
   
   // // Figure out the dimensions
