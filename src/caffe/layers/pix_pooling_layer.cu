@@ -114,16 +114,15 @@ __global__ void PIXPoolBackward(const int nthreads, const Dtype* temp_data,
     if (argmax_data[index]){
       caffe_gpu_scale(num_output, (Dtype)(argmax_data[index]), temp_data, weight_diff[num_output*index]);
     }
-    }
   }
 }
 
 template <typename Dtype>
 void PIXPoolingLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
-  if (!propagate_down[0]) {
-    return;
-  }
+  // if (!propagate_down[0]) {
+  //   return;
+  // }
   // const Dtype* bottom_rois = bottom[1]->gpu_data();
   const Dtype* top_diff = top[0]->gpu_diff();
   
