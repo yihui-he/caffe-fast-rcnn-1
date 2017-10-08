@@ -10,6 +10,7 @@
 #include "caffe/filler.hpp"
 #include "caffe/util/math_functions.hpp"
 #include "caffe/fast_rcnn_layers.hpp"
+#include "caffe/util/gpu_util.cuh"
 
 using std::max;
 using std::min;
@@ -20,7 +21,7 @@ template <typename Dtype>
 __global__ void PIXPoolForward(const int nthreads, const Dtype* bottom_data,  const Dtype* weight, const int num_output,
     const Dtype spatial_scale, const int channels, const int height,
     const int width, const int pooled_height, const int pooled_width,
-    const Dtype* bottom_rois, Dtype* top_data, int* argmax_data) {
+    const Dtype* bottom_rois, Dtype* top_data, Dtype* argmax_data) {
   CUDA_KERNEL_LOOP(index, nthreads) {
     // (n, c, ph, pw) is an element in the pooled output
     int pw = index % pooled_width;
@@ -69,10 +70,10 @@ __global__ void PIXPoolForward(const int nthreads, const Dtype* bottom_data,  co
       for (int w = wstart; w < wend; ++w) {
         int bottom_index = h * width + w;
         int weight_index = ((bottom_data[bottom_index] * pooled_height + ph) * pooled_width +  pw) * num_output;
-        caffe_gpu_atomic_add(Dtype(1), argmax_data+weight_index)
+        caffe_gpu_atomic_add(Dtype(1), argmax_data+weight_index);
         // TODO: it's wrong to not max pooling, though sparse , gradient might sometimes wrong!!
         if (is_empty) {
-
+          ;
         } else {
           caffe_gpu_add(num_output, weight+weight_index, top_data+n*num_output, top_data+n*num_output);
         }
@@ -98,10 +99,10 @@ void PIXPoolingLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
   caffe_set(count, Dtype(0), top_data);
   
   
-  int* argmax_data = max_idx_.mutable_gpu_data();
+  Dtype* argmax_data = max_idx_.mutable_gpu_data();
   // NOLINT_NEXT_LINE(whitespace/operators)
   PIXPoolForward<Dtype><<<CAFFE_GET_BLOCKS(count), CAFFE_CUDA_NUM_THREADS>>>(
-      count, bottom_data, weight, num_output,
+      count, bottom_data, weight, N_,
       spatial_scale_, channels_, height_, width_,
       pooled_height_, pooled_width_, bottom_rois, top_data, argmax_data);
   CUDA_POST_KERNEL_CHECK;
@@ -109,7 +110,7 @@ void PIXPoolingLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
 
 template <typename Dtype>
 __global__ void PIXPoolBackward(const int nthreads, const Dtype* temp_data,
-    const int* argmax_data, const int num_output, Dtype* weight_diff) {
+    const Dtype* argmax_data, const int num_output, Dtype* weight_diff) {
   CUDA_KERNEL_LOOP(index, nthreads) {
     if (argmax_data[index]){
       caffe_gpu_scale(num_output, (Dtype)(argmax_data[index]), temp_data, weight_diff[num_output*index]);
@@ -132,10 +133,10 @@ void PIXPoolingLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
   // Dtype* bottom_diff = bottom[0]->mutable_gpu_diff();
   const int count = K_;
   // caffe_gpu_set(count, Dtype(0.), bottom_diff);
-  const int* argmax_data = max_idx_.gpu_data();
+  const Dtype* argmax_data = max_idx_.gpu_data();
   // NOLINT_NEXT_LINE(whitespace/operators)
   PIXPoolBackward<Dtype><<<CAFFE_GET_BLOCKS(count), CAFFE_CUDA_NUM_THREADS>>>(
-      count, temp_data, argmax_data, num_output, this->blobs_[0]->mutable_gpu_diff());
+      count, temp_data, argmax_data, N_, this->blobs_[0]->mutable_gpu_diff());
   CUDA_POST_KERNEL_CHECK;
 }
 

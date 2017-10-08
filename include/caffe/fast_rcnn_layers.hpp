@@ -91,7 +91,7 @@ class PIXPoolingLayer : public Layer<Dtype> {
   int pooled_width_;
   int n_vc_;
   Dtype spatial_scale_;
-  Blob<int> max_idx_;
+  Blob<Dtype> max_idx_;
   Blob<Dtype> temp_;
 
   int M_;
