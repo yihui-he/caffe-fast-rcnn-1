@@ -7,6 +7,8 @@
 
 #include <cfloat>
 
+#include "caffe/filler.hpp"
+#include "caffe/util/math_functions.hpp"
 #include "caffe/fast_rcnn_layers.hpp"
 
 using std::max;
