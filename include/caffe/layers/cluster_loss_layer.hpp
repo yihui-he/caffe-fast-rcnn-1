@@ -26,22 +26,22 @@ class ClusterLossLayer : public LossLayer<Dtype> {
   virtual inline int ExactNumBottomBlobs() const { return 1; }
   virtual inline int ExactNumTopBlobs() const { return 2; }
   
-}
+
 
  protected:
   /// @copydoc ClusterLossLayer
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
-  virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
+//   virtual void Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+//       const vector<Blob<Dtype>*>& top);
 
   /**
    * 
    */
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
-  virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
-      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+//   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
+//       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 
   Dtype coeff_;
   int num_centers_, num_dims_;

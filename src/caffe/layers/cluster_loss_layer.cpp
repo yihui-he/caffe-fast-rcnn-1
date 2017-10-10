@@ -26,9 +26,9 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     weight_shape[3] = 1;
     this->blobs_[0].reset(new Blob<Dtype>(weight_shape));
     // fill the weights
-    if (layer_param_.cluster_param().weight_filler().type() != "reset") {
+    if (cluster_param.weight_filler().type() != "reset") {
       shared_ptr<Filler<Dtype> > weight_filler(GetFiller<Dtype>(
-          this->layer_param_.cluster_param().weight_filler()));
+          cluster_param.weight_filler()));
       weight_filler->Fill(this->blobs_[0].get());
     }
     else {
