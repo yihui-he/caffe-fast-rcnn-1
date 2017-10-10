@@ -33,7 +33,7 @@ void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       std::fill(center_count_.begin(), center_count_.end(), 1);
       
       prepare_distance_matrix_.ReshapeLike(distance_matrix_);
-      prepare_assign_matrix_..ReshapeLike(assign_matrix_);
+      prepare_assign_matrix_.ReshapeLike(assign_matrix_);
 }
 
 
