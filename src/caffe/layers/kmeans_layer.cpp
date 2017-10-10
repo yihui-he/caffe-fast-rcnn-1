@@ -20,8 +20,9 @@ void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       filler.reset(GetFiller<Dtype>(filler_param));
       filler->Fill(this->blobs_[0].get());      
       
-      update_interval_ = this->.kmeans_param().update_interval();
-      update_iters_ = this->.kmeans_param().update_iters();
+
+      update_interval_ = this->layer_param_.kmeans_param().update_interval();
+      update_iters_ = this->layer_param_.kmeans_param().update_iters();
       current_iter_ = 0;
       current_kmeans_batch_ = 0;
   
