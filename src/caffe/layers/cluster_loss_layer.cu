@@ -263,7 +263,7 @@ void ClusterLossLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
       bottom[0]->gpu_data(),
       this->blobs_[0]->gpu_data(),
       assign_matrix_.gpu_data(),
-      assign_matrix_back-->gpu_data(),
+      assign_matrix_back_.gpu_data(),
       this->blobs_[0]->mutable_gpu_diff(),
       coeff_ / (bottom[0]->count()),
       beta_weights
