@@ -30,11 +30,11 @@ void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       CHECK_GT(update_iters_, 0);
         
       prepare_centers_.ReshapeLike(*this->blobs_[0]);
-      center_count_.resize(num_centers_);
+      center_count_.resize(this->num_centers_);
       std::fill(center_count_.begin(), center_count_.end(), 1);
       
-      prepare_distance_matrix_.ReshapeLike(distance_matrix_);
-      prepare_assign_matrix_.ReshapeLike(assign_matrix_);
+      prepare_distance_matrix_.ReshapeLike(this->distance_matrix_);
+      prepare_assign_matrix_.ReshapeLike(this->assign_matrix_);
 }
 
 
