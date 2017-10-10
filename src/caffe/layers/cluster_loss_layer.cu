@@ -87,6 +87,7 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     int num = bottom[0]->num();
     int spatial_size = bottom[0]->height() * bottom[0]->width();
     FillerParameter filler_param;
+    shared_ptr<Filler<Dtype> > filler;
     filler_param.set_type("constant");
     filler_param.set_value(0.f);
     filler.reset(GetFiller<Dtype>(filler_param));
