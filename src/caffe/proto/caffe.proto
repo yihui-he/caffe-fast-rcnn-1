@@ -403,6 +403,8 @@ message LayerParameter {
   optional ScaleParameter scale_param = 142;
   optional SigmoidParameter sigmoid_param = 124;
   optional SmoothL1LossParameter smooth_l1_loss_param = 8266712;
+  optional ClusterParameter cluster_param = 7266712;
+  optional KmeansParameter kmeans_param = 7266713;
   optional SoftmaxParameter softmax_param = 125;
   optional SPPParameter spp_param = 132;
   optional SliceParameter slice_param = 126;
@@ -1181,6 +1183,14 @@ message SmoothL1LossParameter {
   //   0.5 * (sigma * x) ** 2    -- if x < 1.0 / sigma / sigma
   //   |x| - 0.5 / sigma / sigma -- otherwise
   optional float sigma = 1 [default = 1];
+}
+message ClusterParameter {
+	optional int32 num_centers = 1;
+	optional FillerParameter weight_filler = 2;
+}
+message KmeansParameter {
+	optional int32 update_interval = 1;
+	optional int32 update_iters = 2;
 }
 
 message SliceParameter {
