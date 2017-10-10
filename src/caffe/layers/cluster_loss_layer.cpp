@@ -79,11 +79,11 @@ void ClusterLossLayer<Dtype>::Backward_cpu(const vector<Blob<Dtype>*>& top,
    NOT_IMPLEMENTED;
 }
 
-#ifdef CPU_ONLY
-STUB_GPU(ClusterLossLayer);
-#endif
+// #ifdef CPU_ONLY
+// STUB_GPU(ClusterLossLayer);
+// #endif
 
 INSTANTIATE_CLASS(ClusterLossLayer);
-REGISTER_LAYER_CLASS(ClusterLoss);
+// REGISTER_LAYER_CLASS(ClusterLoss);
 
 }  // namespace caffe
