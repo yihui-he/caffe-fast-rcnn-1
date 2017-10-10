@@ -41,8 +41,7 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
 
     if (current_kmeans_batch_ >= update_iters_) {
       // finish update; apply centers
-      const Blob<Dtype>* weights_ = prepare_centers_;
-      caffe_gpu_memcpy(this.blob_[0]->count(), weights_, this.blob_[0]);
+      caffe_gpu_memcpy(this->blobs_[0]->count(), prepare_centers_.gpu_data(), this->blobs_[0]->mutable_gpu_data());
       LOG(INFO) << "KMeans centers updated";
 
       current_kmeans_batch_ = 0;
@@ -52,8 +51,7 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
 
 template <typename Dtype>
 void KmeansLayer<Dtype>::init_centers(const vector<Blob<Dtype>*>& bottom) {
-  const Blob<Dtype>* weights_ = this.blob_[0];
-  caffe_gpu_memcpy(this.blob_[0]->count(), weights_, (Blob<Dtype>*)prepare_centers_);
+  caffe_gpu_memcpy(this->blobs_[0]->count(), this->blobs_[0]->gpu_data(), (Blob<Dtype>*)prepare_centers_);
   Dtype *center_data = prepare_centers_.mutable_cpu_data();
 
   for (int c = 0; c < this->num_centers_; c++) {
