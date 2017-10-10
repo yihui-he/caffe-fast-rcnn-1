@@ -15,7 +15,7 @@ namespace caffe {
  * 
  */
 template <typename Dtype>
-class ClusterLossLayer : public LossLayer<Dtype> {
+class ClusterLossLayer : public Layer<Dtype> {
  public:
   explicit ClusterLossLayer(const LayerParameter& param)
     : Layer<Dtype>(param) {}
