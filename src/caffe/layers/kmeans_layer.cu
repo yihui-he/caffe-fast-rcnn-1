@@ -120,7 +120,8 @@ __global__ static void calc_assign_matrix(const int count, const int spatial_siz
 template <typename Dtype>
 void KmeansLayer<Dtype>::find_nearest(const vector<Blob<Dtype>*>& bottom) {
   int count_dis = prepare_distance_matrix_.count();
-  KERNEL_CALL(calc_distance_matrix, count_dis)(
+  calc_distance_matrix<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
+  <<<CAFFE_GET_BLOCKS(count_dis), CAFFE_CUDA_NUM_THREADS>>>(
     count_dis,
     bottom[0]->height() * bottom[0]->width(),
     this->num_centers_,
@@ -131,7 +132,8 @@ void KmeansLayer<Dtype>::find_nearest(const vector<Blob<Dtype>*>& bottom) {
     );
 
   int count_ass = prepare_assign_matrix_.count();
-  KERNEL_CALL(calc_assign_matrix, count_ass)(
+  calc_assign_matrix<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
+  <<<CAFFE_GET_BLOCKS(count_ass), CAFFE_CUDA_NUM_THREADS>>>(
     count_ass,
     bottom[0]->height() * bottom[0]->width(),
     this->num_centers_,
