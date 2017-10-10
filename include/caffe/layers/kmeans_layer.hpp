@@ -16,7 +16,7 @@ template <typename Dtype>
 class KmeansLayer : public cluster_loss_layer<Dtype> {
  public:
   explicit KmeansLayer(const LayerParameter& param)
-    : cluster_loss_layer<Dtype>(param) {}
+    : cluster_loss_layer<Dtype>(param), diff_() {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
         const vector<Blob<Dtype>*>& top);    
   virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
