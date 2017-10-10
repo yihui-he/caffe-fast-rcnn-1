@@ -10,7 +10,7 @@ namespace caffe {
 template <typename Dtype>
 void KmeansLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
-  cluster_loss_layer<Dtype>::Forward_gpu(bottom, top);
+  ClusterLossLayer<Dtype>::Forward_gpu(bottom, top);
 }
 
 template <typename Dtype>
@@ -18,7 +18,7 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {  
   // do not bp weights      
   this->param_propagate_down_[0] = 0;
-  cluster_loss_layer<Dtype>::Backward_gpu(top, propagate_down, bottom);      
+  ClusterLossLayer<Dtype>::Backward_gpu(top, propagate_down, bottom);      
   if (current_kmeans_batch_ == 0) {
     if (current_iter_ % update_interval_ == 0) { // start online kmeans
       init_centers();

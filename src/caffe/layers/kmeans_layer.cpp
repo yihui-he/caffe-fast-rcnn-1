@@ -10,7 +10,7 @@ namespace caffe {
 template <typename Dtype>
 void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top) {
-      cluster_loss_layer<Dtype>::LayerSetUp(bottom, top);
+      ClusterLossLayer<Dtype>::LayerSetUp(bottom, top);
         
       // clear weight diff
       FillerParameter filler_param;
@@ -41,7 +41,7 @@ void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 template <typename Dtype>
 void KmeansLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
-    cluster_loss_layer<Dtype>::Reshape(bottom, top);
+    ClusterLossLayer<Dtype>::Reshape(bottom, top);
 }
 
 template <typename Dtype>

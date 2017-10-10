@@ -10,10 +10,10 @@
 
 namespace caffe {
 template <typename Dtype>
-class KmeansLayer : public cluster_loss_layer<Dtype> {
+class KmeansLayer : public ClusterLossLayer<Dtype> {
  public:
   explicit KmeansLayer(const LayerParameter& param)
-    : cluster_loss_layer<Dtype>(param) {}
+    : ClusterLossLayer<Dtype>(param) {}
   virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
         const vector<Blob<Dtype>*>& top);    
   virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
