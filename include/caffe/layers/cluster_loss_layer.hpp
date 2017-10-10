@@ -26,7 +26,7 @@ class ClusterLossLayer : public LossLayer<Dtype> {
 
   virtual inline const char* type() const { return "ClusterLoss"; }
   virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 2; }
+  virtual inline int ExactNumTopBlobs() const { return 1; }
   
 
 

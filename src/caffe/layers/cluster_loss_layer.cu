@@ -179,7 +179,7 @@ __global__ static void bp_acts_kernel(const int count, const int spatial_size,
   }
 }
 
-
+template <typename Dtype>
 __global__ static void bp_weights_kernel(const int count, const int spatial_size, const int num,
   const int num_dims, const Dtype *inputs, const Dtype *clusters, const Dtype *assign_matrix, const Dtype *assign_matrix_back,
   Dtype *cluster_diff, const Dtype coeff, const Dtype scale_targets) {
