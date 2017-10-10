@@ -3,6 +3,7 @@
 
 #include "caffe/layers/cluster_loss_layer.hpp"
 #include "caffe/util/math_functions.hpp"
+#include "caffe/filler.hpp"
 
 namespace caffe {
 
