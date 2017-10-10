@@ -21,7 +21,7 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
   ClusterLossLayer<Dtype>::Backward_gpu(top, propagate_down, bottom);      
   if (current_kmeans_batch_ == 0) {
     if (current_iter_ % update_interval_ == 0) { // start online kmeans
-      init_centers();
+      init_centers(bottom);
 
       current_kmeans_batch_ = 1;
     }
@@ -34,10 +34,10 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
 
   if (current_kmeans_batch_ > 0) {
     // calc assign
-    find_nearest();
+    find_nearest(bottom);
 
     // do kmeans
-    minibatch_kmeans();
+    minibatch_kmeans(bottom);
 
     if (current_kmeans_batch_ >= update_iters_) {
       // finish update; apply centers
