@@ -41,8 +41,8 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
 
     if (current_kmeans_batch_ >= update_iters_) {
       // finish update; apply centers
-
-      caffe_gpu_memcpy(this.blob_[0]->count(), (const Blob<Dtype>*)prepare_centers_, this.blob_[0]);
+      const Blob<Dtype>* weights_ = prepare_centers_;
+      caffe_gpu_memcpy(this.blob_[0]->count(), weights_, this.blob_[0]);
       LOG(INFO) << "KMeans centers updated";
 
       current_kmeans_batch_ = 0;
@@ -51,18 +51,19 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
 }
 
 template <typename Dtype>
-void KmeansLayer<Dtype>::init_centers() {
-  caffe_gpu_memcpy(this.blob_[0]->count(), (const Blob<Dtype>*)this.blob_[0], (Blob<Dtype>*)prepare_centers_);
+void KmeansLayer<Dtype>::init_centers(const vector<Blob<Dtype>*>& bottom) {
+  const Blob<Dtype>* weights_ = this.blob_[0];
+  caffe_gpu_memcpy(this.blob_[0]->count(), weights_, (Blob<Dtype>*)prepare_centers_);
   Dtype *center_data = prepare_centers_.mutable_cpu_data();
 
-  for (int c = 0; c < num_centers_; c++) {
+  for (int c = 0; c < this->num_centers_; c++) {
     if (center_count_[c] == 0) {
-      int nearest_code = (int)(assign_matrix_back_.cpu_data()[c] + 0.5f);
+      int nearest_code = (int)(this->assign_matrix_back_.cpu_data()[c] + 0.5f);
       int spatial_size = bottom[0]->height() * bottom[0]->width();
       int nearest_n = nearest_code / spatial_size, nearest_hw = nearest_code % spatial_size;
       const Dtype *src_data = bottom[0]->cpu_data() + nearest_n * bottom[0]->channels() * spatial_size + nearest_hw;
-      Dtype *dest_data = center_data + c * num_dims_;
-      for (int i = 0; i < num_dims_; i++) {
+      Dtype *dest_data = center_data + c * this->num_dims_;
+      for (int i = 0; i < this->num_dims_; i++) {
         dest_data[i] = src_data[i * spatial_size];
       }
     }

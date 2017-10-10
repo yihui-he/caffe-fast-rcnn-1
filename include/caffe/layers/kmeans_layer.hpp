@@ -34,9 +34,9 @@ class KmeansLayer : public ClusterLossLayer<Dtype> {
   virtual void Backward_gpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 
-    void init_centers();
-    void find_nearest();
-    void minibatch_kmeans();
+    void init_centers(const vector<Blob<Dtype>*>& bottom);
+    void find_nearest(const vector<Blob<Dtype>*>& bottom);
+    void minibatch_kmeans(const vector<Blob<Dtype>*>& bottom);
 
     int update_interval_, update_iters_;
     int current_iter_, current_kmeans_batch_;
