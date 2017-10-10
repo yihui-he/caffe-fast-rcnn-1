@@ -51,7 +51,7 @@ void KmeansLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
 
 template <typename Dtype>
 void KmeansLayer<Dtype>::init_centers(const vector<Blob<Dtype>*>& bottom) {
-  caffe_gpu_memcpy(this->blobs_[0]->count(), this->blobs_[0]->gpu_data(), (Blob<Dtype>*)prepare_centers_);
+  caffe_gpu_memcpy(this->blobs_[0]->count(), this->blobs_[0]->gpu_data(), prepare_centers_.mutable_gpu_data());
   Dtype *center_data = prepare_centers_.mutable_cpu_data();
 
   for (int c = 0; c < this->num_centers_; c++) {
