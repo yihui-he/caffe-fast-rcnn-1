@@ -81,7 +81,7 @@ namespace caffe {
   }
 
 template <typename Dtype>
-void ClusterLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
+void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     const vector<Blob<Dtype>*>& top) {
   if (reset_centers_) {
     int num = bottom[0]->num();
@@ -230,7 +230,7 @@ __global__ static void bp_weights_kernel(const int count, const int spatial_size
 
 
 template <typename Dtype>
-void ClusterLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
+void ClusterLossLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
     const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom) {
   if (propagate_down[0]) {
     const Dtype beta_acts = 0;
@@ -271,6 +271,6 @@ void ClusterLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
   }      
 }
 
-INSTANTIATE_LAYER_GPU_FUNCS(ClusterLayer);
+INSTANTIATE_LAYER_GPU_FUNCS(ClusterLossLayer);
 
 }  // namespace caffe
