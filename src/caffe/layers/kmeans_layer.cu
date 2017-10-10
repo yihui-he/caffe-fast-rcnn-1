@@ -123,8 +123,8 @@ void KmeansLayer<Dtype>::find_nearest(const vector<Blob<Dtype>*>& bottom) {
   KERNEL_CALL(calc_distance_matrix, count_dis)(
     count_dis,
     bottom[0]->height() * bottom[0]->width(),
-    num_centers_,
-    num_dims_,
+    this->num_centers_,
+    this->num_dims_,
     bottom[0]->gpu_data(),
     prepare_centers_.gpu_data(),
     prepare_distance_matrix_.mutable_gpu_data()
@@ -134,7 +134,7 @@ void KmeansLayer<Dtype>::find_nearest(const vector<Blob<Dtype>*>& bottom) {
   KERNEL_CALL(calc_assign_matrix, count_ass)(
     count_ass,
     bottom[0]->height() * bottom[0]->width(),
-    num_centers_,
+    this->num_centers_,
     prepare_distance_matrix_.gpu_data(),
     prepare_assign_matrix_.mutable_gpu_data()
     );
@@ -158,9 +158,9 @@ void KmeansLayer<Dtype>::minibatch_kmeans(const vector<Blob<Dtype>*>& bottom) {
       center_count_[center_index]++;
 
       Dtype ratio = 1.f / center_count_[center_index];
-      const Dtype *src_data = input_data + n * num_dims_ * spatial_size + s;
-      Dtype *dest_data = centers + center_index * num_dims_;
-      for (int i = 0; i < num_dims_; i++) {
+      const Dtype *src_data = input_data + n * this->num_dims_ * spatial_size + s;
+      Dtype *dest_data = centers + center_index * this->num_dims_;
+      for (int i = 0; i < this->num_dims_; i++) {
         dest_data[i] = dest_data[i] * (1 - ratio) + src_data[i * spatial_size] * ratio;
       }
     }
