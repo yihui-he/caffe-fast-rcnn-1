@@ -20,8 +20,8 @@ class KmeansLayer : public ClusterLossLayer<Dtype> {
       const vector<Blob<Dtype>*>& top);
 
   virtual inline const char* type() const { return "Kmeans"; }
-  virtual inline int ExactNumBottomBlobs() const { return 1; }
-  virtual inline int ExactNumTopBlobs() const { return 1; }
+//   virtual inline int ExactNumBottomBlobs() const { return 1; }
+//   virtual inline int ExactNumTopBlobs() const { return 1; }
 
  protected:
   /// @copydoc KmeansLayer

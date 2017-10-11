@@ -153,7 +153,7 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     unique_assign.insert(v);
   }
 
-  top[0]->mutable_cpu_data()[1] = (Dtype)unique_assign.size();
+  top[1]->mutable_cpu_data()[0] = (Dtype)unique_assign.size();
         
 }
 
