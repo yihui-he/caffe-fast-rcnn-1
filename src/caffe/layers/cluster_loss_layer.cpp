@@ -38,23 +38,7 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     }
   }  // parameter initialization
   this->param_propagate_down_.resize(this->blobs_.size(), true);
-  // init internal structures
-  distance_matrix_.Reshape(bottom[0]->num(), 
-                           num_centers_, 
-                           bottom[0]->height(),
-                           bottom[0]->width());
-  assign_matrix_.Reshape(bottom[0]->num(), 
-                           1, 
-                           bottom[0]->height(),
-                           bottom[0]->width());
-  assign_matrix_back_.Reshape(num_centers_, 
-                           1, 
-                           1, 
-                           1);
-  loss_matrix_.Reshape(bottom[0]->num(), 
-                           1, 
-                           bottom[0]->height(),
-                           bottom[0]->width());
+
 
   vector<int> loss_shape(0);  // Loss layers output a scalar; 0 axes.
   top[0]->Reshape(loss_shape);
@@ -66,7 +50,23 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 template <typename Dtype>
 void ClusterLossLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
-
+  // init internal structures
+  distance_matrix_.Reshape(bottom[0]->num(), 
+  num_centers_, 
+  bottom[0]->height(),
+  bottom[0]->width());
+assign_matrix_.Reshape(bottom[0]->num(), 
+  1, 
+  bottom[0]->height(),
+  bottom[0]->width());
+assign_matrix_back_.Reshape(num_centers_, 
+  1, 
+  1, 
+  1);
+loss_matrix_.Reshape(bottom[0]->num(), 
+  1, 
+  bottom[0]->height(),
+  bottom[0]->width());
 }
 
 template <typename Dtype>
