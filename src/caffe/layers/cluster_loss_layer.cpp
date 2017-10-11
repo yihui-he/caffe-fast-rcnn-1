@@ -43,6 +43,10 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   vector<int> loss_shape(0);  // Loss layers output a scalar; 0 axes.
   top[0]->Reshape(loss_shape);
   top[1]->Reshape(loss_shape);
+  assign_matrix_back_.Reshape(num_centers_, 
+    1, 
+    1, 
+    1);
 }
 
 
@@ -59,10 +63,6 @@ assign_matrix_.Reshape(bottom[0]->num(),
   1, 
   bottom[0]->height(),
   bottom[0]->width());
-assign_matrix_back_.Reshape(num_centers_, 
-  1, 
-  1, 
-  1);
 loss_matrix_.Reshape(bottom[0]->num(), 
   1, 
   bottom[0]->height(),
