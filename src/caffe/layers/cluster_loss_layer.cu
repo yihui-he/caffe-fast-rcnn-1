@@ -141,7 +141,8 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     assign_matrix_back_.mutable_gpu_data()
     );
   Dtype loss;
-  caffe_gpu_asum(count_ass, loss_matrix_.gpu_data(), &loss);
+  // caffe_gpu_asum(count_ass, loss_matrix_.gpu_data(), &loss);
+  caffe_cpu_asum(count_ass, loss_matrix_.cpu_data(), &loss);
   top[0]->mutable_cpu_data()[0] = (Dtype)loss / spatial_size / bottom[0]->num()  / num_dims_;
 
   // merge diversity
