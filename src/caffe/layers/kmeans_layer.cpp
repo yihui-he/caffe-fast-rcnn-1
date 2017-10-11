@@ -33,7 +33,6 @@ void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       center_count_.resize(this->num_centers_);
       std::fill(center_count_.begin(), center_count_.end(), 1);
       
-      prepare_distance_matrix_.ReshapeLike(this->distance_matrix_);
       prepare_assign_matrix_.ReshapeLike(this->assign_matrix_);
 }
 
@@ -43,6 +42,8 @@ template <typename Dtype>
 void KmeansLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
     ClusterLossLayer<Dtype>::Reshape(bottom, top);
+    prepare_distance_matrix_.ReshapeLike(this->distance_matrix_);
+    
 }
 
 template <typename Dtype>
