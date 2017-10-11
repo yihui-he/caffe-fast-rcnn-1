@@ -131,8 +131,8 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     loss_matrix_.mutable_gpu_data()
     );
 
-    calc_assign_matrix_back<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
-    <<<CAFFE_GET_BLOCKS(num_centers_), CAFFE_CUDA_NUM_THREADS>>>(        
+  calc_assign_matrix_back<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
+  <<<CAFFE_GET_BLOCKS(num_centers_), CAFFE_CUDA_NUM_THREADS>>>(        
     num_centers_,
     spatial_size,
     bottom[0]->num(),
@@ -140,20 +140,20 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     distance_matrix_.gpu_data(),
     assign_matrix_back_.mutable_gpu_data()
     );
-    Dtype loss;
-    caffe_gpu_asum(count_ass, loss_matrix_.gpu_data(), &loss);
-    top[0]->mutable_cpu_data()[0] = (Dtype)loss / spatial_size / bottom[0]->num()  / num_dims_;
+  Dtype loss;
+  caffe_gpu_asum(count_ass, loss_matrix_.gpu_data(), &loss);
+  top[0]->mutable_cpu_data()[0] = (Dtype)loss / spatial_size / bottom[0]->num()  / num_dims_;
 
-    // merge diversity
-    std::set<int> unique_assign;
-    const Dtype *dev_assign = assign_matrix_.cpu_data();
-    int count = assign_matrix_.count();
-    for (int i = 0; i < count; i++) {
-      int v = (int)(dev_assign[i] + 0.5f);
-      unique_assign.insert(v);
-    }
+  // merge diversity
+  std::set<int> unique_assign;
+  const Dtype *dev_assign = assign_matrix_.cpu_data();
+  int count = assign_matrix_.count();
+  for (int i = 0; i < count; i++) {
+    int v = (int)(dev_assign[i] + 0.5f);
+    unique_assign.insert(v);
+  }
 
-    top[0]->mutable_cpu_data()[1] = (Dtype)unique_assign.size();
+  top[0]->mutable_cpu_data()[1] = (Dtype)unique_assign.size();
         
 }
 
