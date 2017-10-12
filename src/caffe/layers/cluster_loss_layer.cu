@@ -130,7 +130,7 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     assign_matrix_.mutable_gpu_data(),
     loss_matrix_.mutable_gpu_data()
     );
-
+  LOG(INFO) << num_centers_;
   calc_assign_matrix_back<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
   <<<CAFFE_GET_BLOCKS(num_centers_), CAFFE_CUDA_NUM_THREADS>>>(        
     num_centers_,

@@ -63,8 +63,8 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
 template <typename Dtype>
 void ClusterLossLayer<Dtype>::Reshape(
   const vector<Blob<Dtype>*>& bottom, const vector<Blob<Dtype>*>& top) {
-  // init internal structures
-  distance_matrix_.Reshape(bottom[0]->num(), 
+// init internal structures
+distance_matrix_.Reshape(bottom[0]->num(), 
   num_centers_, 
   bottom[0]->height(),
   bottom[0]->width());
