@@ -169,6 +169,10 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
       maxassigned_after = dev_assign_after[i];
     }
   }
+  CHECK_EQ(assign_matrix_.shape[0], top[2]->shape[0]);
+  CHECK_EQ(assign_matrix_.shape[1], top[2]->shape[1]);
+  CHECK_EQ(assign_matrix_.shape[2], top[2]->shape[2]);
+  CHECK_EQ(assign_matrix_.shape[3], top[2]->shape[3]);
   LOG(INFO) << maxassigned << "to" << maxassigned_after;
 }
 
