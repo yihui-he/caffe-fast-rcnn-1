@@ -148,32 +148,15 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     std::set<int> unique_assign;
     const Dtype *dev_assign = assign_matrix_.cpu_data();
     const int count = assign_matrix_.count();
-    int maxassigned = 0;
     for (int i = 0; i < count; i++) {
-      if (dev_assign[i]>maxassigned){
-        maxassigned = dev_assign[i];
-      }
       int v = (int)(dev_assign[i] + 0.5f);
       unique_assign.insert(v);
     }
     
   top[1]->mutable_cpu_data()[0] = (Dtype)unique_assign.size();
   if (num_top_ == 3) {
-    caffe_gpu_memcpy(count, assign_matrix_.gpu_data(), top[2]->mutable_gpu_data());
+    caffe_gpu_memcpy(count * sizeof(Dtype), assign_matrix_.gpu_data(), top[2]->mutable_gpu_data());
   }  
-  const Dtype *dev_assign_after = top[2]->cpu_data();  
-  const int count_after = top[2]->count();  
-  int maxassigned_after = 0;
-  for (int i = 0; i < count_after; i++) {
-    if (dev_assign_after[i]>maxassigned_after){
-      maxassigned_after = dev_assign_after[i];
-    }
-  }
-  CHECK_EQ(assign_matrix_.shape(0), top[2]->shape(0));
-  CHECK_EQ(assign_matrix_.shape(1), top[2]->shape(1));
-  CHECK_EQ(assign_matrix_.shape(2), top[2]->shape(2));
-  CHECK_EQ(assign_matrix_.shape(3), top[2]->shape(3));
-  LOG(INFO) << maxassigned << "to" << maxassigned_after;
 }
 
 
