@@ -7,29 +7,29 @@
 
 namespace caffe {
 
-  template <typename Dtype>
-  __global__ static void calc_distance_matrix(const int count, const int spatial_size,
-    const int num_centers, const int num_dims, const Dtype *inputs, const Dtype *clusters,
-    Dtype *distance_matrix) {
-    CUDA_KERNEL_LOOP(index, count) {
-      const int hw = index % spatial_size;
-      const int c = index / spatial_size % num_centers;
-      const int n = index / spatial_size / num_centers;
-  
-      inputs += n * num_dims * spatial_size + hw;
-      clusters += c * num_dims;
-  
-      Dtype v = 0.f;
-      for (int i = 0; i < num_dims; i++) {
-        Dtype vi = inputs[i * spatial_size];
-        Dtype vc = clusters[i];
-        //v += fabsf(vi - vc); // l1
-        v += (vi - vc) * (vi - vc); // l2
-      }
-  
-      distance_matrix[index] = v;
+template <typename Dtype>
+__global__ static void calc_distance_matrix(const int count, const int spatial_size,
+  const int num_centers, const int num_dims, const Dtype *inputs, const Dtype *clusters,
+  Dtype *distance_matrix) {
+  CUDA_KERNEL_LOOP(index, count) {
+    const int hw = index % spatial_size;
+    const int c = index / spatial_size % num_centers;
+    const int n = index / spatial_size / num_centers;
+
+    inputs += n * num_dims * spatial_size + hw;
+    clusters += c * num_dims;
+
+    Dtype v = 0.f;
+    for (int i = 0; i < num_dims; i++) {
+      Dtype vi = inputs[i * spatial_size];
+      Dtype vc = clusters[i];
+      //v += fabsf(vi - vc); // l1
+      v += (vi - vc) * (vi - vc); // l2
     }
+
+    distance_matrix[index] = v;
   }
+}
   
   template <typename Dtype>
   __global__ static void calc_assign_matrix(const int count, const int spatial_size,
