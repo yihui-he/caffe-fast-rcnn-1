@@ -46,7 +46,7 @@ class ClusterLossLayer : public Layer<Dtype> {
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 
   Dtype coeff_;
-  int num_centers_, num_dims_;
+  int num_centers_, num_dims_, num_top_;
   bool reset_centers_;
 
   Blob<Dtype> distance_matrix_, assign_matrix_, assign_matrix_back_, loss_matrix_;

@@ -155,7 +155,9 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
   }
 
   top[1]->mutable_cpu_data()[0] = (Dtype)unique_assign.size();
-        
+  if (num_top_ == 3) {
+    caffe_gpu_memcpy(count, assign_matrix_.gpu_data(), top[2]->mutable_gpu_data());
+  }  
 }
 
 

@@ -15,6 +15,7 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   coeff_ = (Dtype)1.f;
   num_centers_ = cluster_param.num_centers();
   num_dims_ = bottom[0]->shape(1);
+  num_top_ = top.size();
 
   if (this->blobs_.size() > 0) {
     LOG(INFO) << "Skipping parameter initialization";
@@ -47,6 +48,14 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     1, 
     1, 
     1);
+  if (num_top == 3) {
+    vector<int> top_shape(4);
+    top_shape[0] = bottom[0]->shape(0);
+    top_shape[1] = 1;
+    top_shape[2] = bottom[0]->shape(2);
+    top_shape[3] = bottom[0]->shape(3);    
+    top[2]->Reshape(top_shape);
+  }
 }
 
 
@@ -67,6 +76,9 @@ loss_matrix_.Reshape(bottom[0]->num(),
   1, 
   bottom[0]->height(),
   bottom[0]->width());
+  if (num_top_ == 3) {
+    top[2]->ReshapeLike(assign_matrix_);
+  }  
 }
 
 template <typename Dtype>
