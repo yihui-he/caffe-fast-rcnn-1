@@ -147,7 +147,7 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     // merge diversity
     std::set<int> unique_assign;
     const Dtype *dev_assign = assign_matrix_.cpu_data();
-    int count = assign_matrix_.count();
+    const int count = assign_matrix_.count();
     int maxassigned = 0;
     for (int i = 0; i < count; i++) {
       if (dev_assign[i]>maxassigned){
@@ -162,7 +162,7 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     caffe_gpu_memcpy(count, assign_matrix_.gpu_data(), top[2]->mutable_gpu_data());
   }  
   const Dtype *dev_assign_after = top[2]->cpu_data();  
-  int count_after = top[2]->count();  
+  const int count_after = top[2]->count();  
   int maxassigned_after = 0;
   for (int i = 0; i < count_after; i++) {
     if (dev_assign_after[i]>maxassigned_after){
