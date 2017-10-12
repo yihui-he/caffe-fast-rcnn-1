@@ -130,30 +130,34 @@ void ClusterLossLayer<Dtype>::Forward_gpu(const vector<Blob<Dtype>*>& bottom,
     assign_matrix_.mutable_gpu_data(),
     loss_matrix_.mutable_gpu_data()
     );
-  // LOG(INFO) << num_centers_;
-  calc_assign_matrix_back<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
-  <<<CAFFE_GET_BLOCKS(num_centers_), CAFFE_CUDA_NUM_THREADS>>>(        
-    num_centers_,
-    spatial_size,
-    bottom[0]->num(),
-    num_centers_,
-    distance_matrix_.gpu_data(),
-    assign_matrix_back_.mutable_gpu_data()
+    calc_assign_matrix_back<Dtype>  // NOLINT_NEXT_LINE(whitespace/operators)
+    <<<CAFFE_GET_BLOCKS(num_centers_), CAFFE_CUDA_NUM_THREADS>>>(        
+      num_centers_,
+      spatial_size,
+      bottom[0]->num(),
+      num_centers_,
+      distance_matrix_.gpu_data(),
+      assign_matrix_back_.mutable_gpu_data()
     );
-  Dtype loss;
-  caffe_gpu_asum(count_ass, loss_matrix_.gpu_data(), &loss);
-  // loss = caffe_cpu_asum(count_ass, loss_matrix_.cpu_data());
-  top[0]->mutable_cpu_data()[0] = (Dtype)loss / spatial_size / bottom[0]->num()  / num_dims_;
-
-  // merge diversity
-  std::set<int> unique_assign;
-  const Dtype *dev_assign = assign_matrix_.cpu_data();
-  int count = assign_matrix_.count();
-  for (int i = 0; i < count; i++) {
-    int v = (int)(dev_assign[i] + 0.5f);
-    unique_assign.insert(v);
-  }
-
+    Dtype loss;
+    caffe_gpu_asum(count_ass, loss_matrix_.gpu_data(), &loss);
+    // loss = caffe_cpu_asum(count_ass, loss_matrix_.cpu_data());
+    top[0]->mutable_cpu_data()[0] = (Dtype)loss / spatial_size / bottom[0]->num()  / num_dims_;
+    
+    // merge diversity
+    std::set<int> unique_assign;
+    const Dtype *dev_assign = assign_matrix_.cpu_data();
+    int count = assign_matrix_.count();
+    int maxassigned = 0;
+    for (int i = 0; i < count; i++) {
+      if (dev_assign[i]>maxassigned){
+        maxassigned = dev_assign[i];
+      }
+      int v = (int)(dev_assign[i] + 0.5f);
+      unique_assign.insert(v);
+    }
+    
+    LOG(INFO) << maxassigned;
   top[1]->mutable_cpu_data()[0] = (Dtype)unique_assign.size();
   if (num_top_ == 3) {
     caffe_gpu_memcpy(count, assign_matrix_.gpu_data(), top[2]->mutable_gpu_data());
