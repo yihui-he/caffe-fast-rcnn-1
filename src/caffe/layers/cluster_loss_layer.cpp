@@ -48,7 +48,7 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     1, 
     1, 
     1);
-  if (num_top == 3) {
+  if (num_top_ == 3) {
     vector<int> top_shape(4);
     top_shape[0] = bottom[0]->shape(0);
     top_shape[1] = 1;
