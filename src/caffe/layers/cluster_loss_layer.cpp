@@ -48,13 +48,17 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
     1, 
     1, 
     1);
-  if (num_top_ == 3) {
+  if (num_top_ > 2) {
     vector<int> top_shape(4);
     top_shape[0] = bottom[0]->shape(0);
     top_shape[1] = 1;
     top_shape[2] = bottom[0]->shape(2);
     top_shape[3] = bottom[0]->shape(3);    
     top[2]->Reshape(top_shape);
+    if (num_top_ > 3) {
+      top_shape[1] = num_centers_;
+      top[3]->Reshape(top_shape);
+    }
   }
 }
 
@@ -73,8 +77,11 @@ void ClusterLossLayer<Dtype>::Reshape(
     bottom[0]->shape(2),
     bottom[0]->shape(3));
   loss_matrix_.ReshapeLike(assign_matrix_);
-  if (num_top_ == 3) {
+  if (num_top_ > 2) {
     top[2]->ReshapeLike(assign_matrix_);
+    if (num_top_ > 3) {
+      top[3]->ReshapeLike(distance_matrix_);
+    }  
   }  
 }
 
