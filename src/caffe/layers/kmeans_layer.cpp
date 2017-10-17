@@ -13,12 +13,13 @@ void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       ClusterLossLayer<Dtype>::LayerSetUp(bottom, top);
         
       // clear weight diff
-      FillerParameter filler_param;
-      shared_ptr<Filler<Dtype> > filler;
-      filler_param.set_type("constant");
-      filler_param.set_value(0.f);
-      filler.reset(GetFiller<Dtype>(filler_param));
-      filler->Fill(this->blobs_[0]->mutable_cpu_diff());      
+      // FillerParameter filler_param;
+      // shared_ptr<Filler<Dtype> > filler;
+      // filler_param.set_type("constant");
+      // filler_param.set_value(0.f);
+      // filler.reset(GetFiller<Dtype>(filler_param));
+      // filler->Fill();      
+      caffe_gpu_set(this->blobs_[0]->count(), static_cast<Dtype>(0), this->blobs_[0]->mutable_cpu_diff());
       
 
       update_interval_ = this->layer_param_.kmeans_param().update_interval();
