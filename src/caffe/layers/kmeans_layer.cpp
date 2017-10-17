@@ -18,7 +18,7 @@ void KmeansLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
       filler_param.set_type("constant");
       filler_param.set_value(0.f);
       filler.reset(GetFiller<Dtype>(filler_param));
-      filler->Fill(this->blobs_[0].get());      
+      filler->Fill(this->blobs_[0]->mutable_cpu_diff());      
       
 
       update_interval_ = this->layer_param_.kmeans_param().update_interval();

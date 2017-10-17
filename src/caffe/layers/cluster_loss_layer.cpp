@@ -20,6 +20,7 @@ void ClusterLossLayer<Dtype>::LayerSetUp(const vector<Blob<Dtype>*>& bottom,
   if (this->blobs_.size() > 0) {
     LOG(INFO) << "Skipping parameter initialization";
   } else {
+    LOG(INFO) << "fuck, why reset my params???";
     this->blobs_.resize(1);
     // Initialize the weights
     vector<int> weight_shape(4);
