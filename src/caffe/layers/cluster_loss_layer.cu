@@ -256,7 +256,8 @@ void ClusterLossLayer<Dtype>::Backward_gpu(const vector<Blob<Dtype>*>& top,
       );
   }
 
-  if (this->param_propagate_down_[0]) {
+  // if (this->param_propagate_down_[0]) {
+  if (false) {
     const Dtype beta_weights = 0;
 
     int count = this->blobs_[0]->count();
